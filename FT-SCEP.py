@@ -10,6 +10,7 @@ from time import time
 import requests
 import json
 from helpers import *
+from tqdm import tqdm
 
 parse = ArgumentParser(
     description="Generates a shop compatible with Tinfoil using a configuration file."
@@ -64,23 +65,29 @@ drive = build(
 print("Getting all files. (This may take a while.)")
 all_files = []
 for i in config["mirrors"]:
-    all_files += lsf(drive, i)
-
+    get_all_files_in_folder(drive, i, all_files, recursion=True)
 print("Matching files.")
 
 for i in all_files:
-    tid = find_title_id(i["name"])
-    if tid in titledb:
-        if "mirrors" not in titledb[tid]:
-            titledb[tid]["mirrors"] = {}
+        tid = find_title_id(i["name"])
+        if tid in titledb:
+            if "mirrors" not in titledb[tid]:
+                titledb[tid]["mirrors"] = {}
 
-        if i["fileExtension"] not in titledb[tid]["mirrors"]:
+            if i["fileExtension"] not in titledb[tid]["mirrors"]:
+                titledb[tid]["mirrors"][i["fileExtension"]] = []
+
+            titledb[tid]["mirrors"][i["fileExtension"]].append(generate_entry(i))
+
+        elif tid not in titledb:
+            print("Not found in titledb: %s" % tid)
+            titledb[tid] = {'id': tid}
+            titledb[tid]["mirrors"] = {}
             titledb[tid]["mirrors"][i["fileExtension"]] = []
 
-        titledb[tid]["mirrors"][i["fileExtension"]].append(generate_entry(i))
-
-    elif tid not in titledb:
-        print("Not found in titledb: %s" % tid)
+            titledb[tid]["mirrors"][i["fileExtension"]].append(generate_entry(i))
+            print(titledb[tid])
+            
 
 # Remove entries from the database that do not have any mirrors
 for i in list(titledb.items()):
