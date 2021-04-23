@@ -107,32 +107,34 @@ regular_dlc = []
 lps = []
 
 for i in titledb:
-    if i["id"].endswith("000"):
-        if i.get("publisher") == "Nintendo":
-            first_base.append(i)
-        else:
-            regular_base.append(i)
+    if i["id"]:
+        if i["id"].endswith("000"):
+            if i.get("publisher") == "Nintendo":
+                first_base.append(i)
+            else:
+                regular_base.append(i)
 
 first_ids = [i["id"][:-4] for i in first_base]
 
 for i in titledb:
-    if i["id"].endswith("000"):
-        continue
-    if (
-        "language pack" in "{}".format(i).lower()
-        or "audio pack" in "{}".format(i).lower()
-    ):
-        lps.append(i)
-    elif i["id"][:-4] in first_ids:
-        if i["id"].endswith("800"):
-            first_updates.append(i)
+    if i["id"]:
+        if i["id"].endswith("000"):
+            continue
+        if (
+            "language pack" in "{}".format(i).lower()
+            or "audio pack" in "{}".format(i).lower()
+        ):
+            lps.append(i)
+        elif i["id"][:-4] in first_ids:
+            if i["id"].endswith("800"):
+                first_updates.append(i)
+            else:
+                first_dlc.append(i)
         else:
-            first_dlc.append(i)
-    else:
-        if i["id"].endswith("800"):
-            regular_updates.append(i)
-        else:
-            regular_dlc.append(i)
+            if i["id"].endswith("800"):
+                regular_updates.append(i)
+            else:
+                regular_dlc.append(i)
 
 print("Generating shops.")
 
