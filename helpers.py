@@ -11,7 +11,7 @@ from Crypto.Cipher import AES
 from os.path import exists
 from random import randint
 from zlib import compress
-from re import search, match
+from re import search, match, sub
 from json import load
 import requests, socket, json
 from time import sleep
@@ -215,7 +215,8 @@ def get_all_files_in_folder(drive, folder_id, dict_files, recursion=True):
         if "size" in _file:
             #print(self.check_file_shared(_file))
             #print(_file)
-            dict_files.append({"id": _file["id"], "size": _file["size"], "name": "[0" + _file["name"].split("[0", 1)[1],"fileExtension": _file["fileExtension"], "shared": check_file_shared(drive, _file)})
+            name = "[0" + sub(r"(.*\[(|\s)0)", "", _file["name"])
+            dict_files.append({"id": _file["id"], "size": _file["size"], "name": name,"fileExtension": _file["fileExtension"], "shared": check_file_shared(drive, _file)})
     if recursion:
         for _folder in _lsd(drive, folder_id):
             get_all_files_in_folder(drive, _folder["id"], dict_files, recursion=recursion)
