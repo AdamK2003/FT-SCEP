@@ -99,12 +99,13 @@ def generate_shop(minidb):
         if "mirrors" in i:
             for j in i["mirrors"].values():  # unlisted
                 for k in j:
-                    shop_files.append(
-                        {
-                            "url": "gdrive:/{}#{}".format(k["id"], k["filename"]),
-                            "size": int(k["size"]),
-                        }
-                    )
+                    if k["id"] is not None:
+                        shop_files.append(
+                            {
+                                "url": "gdrive:{}#{}".format(k["id"], k["filename"]),
+                                "size": int(k["size"]),
+                            }
+                        )
     return shop_files
 
 
@@ -130,7 +131,7 @@ def get_creds(credentials, token, scopes=["https://www.googleapis.com/auth/drive
 
 
 def generate_entry(item):
-    return {"id": item["id"], "filename": item["name"], "size": int(item["size"])}
+    return {"id": item["id"], "filename": item["name"], "version": int(item["version"]), "size": int(item["size"])}
 
 
 def find_title_id(name):
@@ -213,9 +214,12 @@ def share_file(drive, file_id_to_share):
 def get_all_files_in_folder(drive, folder_id, dict_files, recursion=True):
     for _file in _lsf(drive, folder_id):
         if "size" in _file:
-            #print(self.check_file_shared(_file))
-            #print(_file)
-            dict_files.append({"id": _file["id"], "size": _file["size"], "name": "[0" + _file["name"].split("[0", 1)[1],"fileExtension": _file["fileExtension"], "shared": check_file_shared(drive, _file)})
+            realver = search(r"\[v[0-9]{5,}\]", _file["name"]) #tinfoil assums v0 if missing
+            if realver is None:
+                dict_files.append({"id": _file["id"], "size": _file["size"], "name": "[{}].{}".format(find_title_id(_file["name"]), _file["fileExtension"]), "version": 0, "fileExtension": _file["fileExtension"], "shared": check_file_shared(drive, _file)})
+            else:
+                realver=realver.group(0)
+                dict_files.append({"id": _file["id"], "size": _file["size"], "name": "[{}]{}.{}".format(find_title_id(_file["name"]), realver, _file["fileExtension"]), "version": int(realver[2:-1]), "fileExtension": _file["fileExtension"], "shared": check_file_shared(drive, _file)})
     if recursion:
         for _folder in _lsd(drive, folder_id):
             get_all_files_in_folder(drive, _folder["id"], dict_files, recursion=recursion)

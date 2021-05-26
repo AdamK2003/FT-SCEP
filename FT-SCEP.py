@@ -94,6 +94,20 @@ for i in list(titledb.items()):
     if "mirrors" not in i[1]:
         titledb.pop(i[0])
 
+for i in list(titledb.items()):
+    bestver=0
+    for exts in i[1]["mirrors"]:
+
+        for fils in i[1]["mirrors"][exts]:
+            if int(fils["version"]) > bestver:
+                bestver = fils["version"]
+        ind = 0
+        for fils in i[1]["mirrors"][exts]:
+            if int(fils["version"]) < bestver:
+                fils["id"] = None
+                ind-=1
+            ind+=1
+
 titledb = titledb.values()
 
 print("Splitting Database")
