@@ -93,7 +93,7 @@ def encrypt(
         + doEncrypt(aesKey, compressed)
     )
 
-def generate_shop(minidb):
+def generate_shop(minidb, domain):
     shop_files = []
     for i in minidb:
         if "mirrors" in i:
@@ -102,7 +102,7 @@ def generate_shop(minidb):
                     if k["id"] is not None:
                         shop_files.append(
                             {
-                                "url": "gdrive:{}#{}".format(k["id"], k["filename"]),
+                                "url": "{}{}#{}".format(domain, k["id"], k["filename"]),
                                 "size": int(k["size"]),
                             }
                         )

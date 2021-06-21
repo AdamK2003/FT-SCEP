@@ -35,6 +35,12 @@ parse.add_argument(
     type=str,
     help="Uploads the shops to Google Drive, creating new files, and saves the File IDs to your configuration file. Takes in an optional folder to create the files in. Defaults to root of My Drive.",
 )
+parse.add_argument(
+    "--domain",
+    type=str,
+    default="gdrive:",
+    help="Custom domain.",
+)
 
 args = parse.parse_args()
 
@@ -152,13 +158,13 @@ for i in titledb:
 
 print("Generating shops.")
 
-first_base_shop = generate_shop(first_base)
-first_updates_shop = generate_shop(first_updates)
-first_dlc_shop = generate_shop(first_dlc)
-regular_base_shop = generate_shop(regular_base)
-regular_updates_shop = generate_shop(regular_updates)
-regular_dlc_shop = generate_shop(regular_dlc)
-lps_shop = generate_shop(lps)
+first_base_shop = generate_shop(first_base, args.domain)
+first_updates_shop = generate_shop(first_updates, args.domain)
+first_dlc_shop = generate_shop(first_dlc, args.domain)
+regular_base_shop = generate_shop(regular_base, args.domain)
+regular_updates_shop = generate_shop(regular_updates, args.domain)
+regular_dlc_shop = generate_shop(regular_dlc, args.domain)
+lps_shop = generate_shop(lps, args.domain)
 
 print(
     "\nTotal File Count: {}\n"
