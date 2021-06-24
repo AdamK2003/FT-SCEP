@@ -90,3 +90,5 @@ This will create new files in Google Drive to upload your shops to. It will crea
 TitleDB is rather large, and is constantly updated. FT-SCEP will cache the TitleDB and use it instead of redownloading the TitleDB each time. It has a lifespan of 28800 seconds. You can change the TTL with this flag.
 ##### `--cache-path [path]`
 You can change the cache save path using this flag.
+##### `--domain [domain+path]`
+You can use a custom domain instead of the default gdrive: source usiong this flag. FT-SCEP will append the gdrive file id to the argument - don't forget your trailing slashes.
