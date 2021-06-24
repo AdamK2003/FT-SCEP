@@ -91,4 +91,4 @@ TitleDB is rather large, and is constantly updated. FT-SCEP will cache the Title
 ##### `--cache-path [path]`
 You can change the cache save path using this flag.
 ##### `--domain [domain+path]`
-You can use a custom domain instead of the default gdrive: source usiong this flag. FT-SCEP will append the gdrive file id to the argument - don't forget your trailing slashes.
+You can use a custom domain instead of the default `gdrive:` source using this flag. FT-SCEP will append the gdrive file id to the argument - don't forget your trailing slashes.
