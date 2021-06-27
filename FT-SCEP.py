@@ -44,7 +44,7 @@ parse.add_argument(
 
 args = parse.parse_args()
 
-config = json.load(open(args.config, "r"))
+config = json.load(open(args.config, "r", encoding="utf8"))
 
 if exists(args.cache_path):
     diff = time() - stat(args.cache_path).st_ctime
