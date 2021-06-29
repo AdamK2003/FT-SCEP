@@ -199,9 +199,17 @@ def check_file_shared(drive, file_to_check):
         for permission in file_to_check["permissionIds"]:
             if "anyoneWithLink" == permission:
                 return True
+    share_file(drive, file_to_check["id"])
     return True
 
-
+def share_file(drive, file_id_to_share):
+    try:
+        _apicall(drive, drive.permissions().create(fileId=file_id_to_share, supportsAllDrives=True, body={
+            "role": "reader",
+            "type": "anyone"
+        }))
+    except:
+        print(file_id_to_share)
     
 def get_all_files_in_folder(drive, folder_id, dict_files, recursion=True):
     for _file in _lsf(drive, folder_id):
