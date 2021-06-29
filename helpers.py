@@ -194,12 +194,13 @@ def _lsf(drive, folder_id, fields="files(id,name,size,fileExtension,permissionId
         searchTerms="not mimeType contains \"application/vnd.google-apps.folder\""
     )
 
-def check_file_shared(drive, file_to_check):
+def check_file_shared(drive, file_to_check, share_files):
     if "permissionIds" in file_to_check:
         for permission in file_to_check["permissionIds"]:
             if "anyoneWithLink" == permission:
                 return True
-    share_file(drive, file_to_check["id"])
+    if share_files:
+        share_file(drive, file_to_check["id"])
     return True
 
 def share_file(drive, file_id_to_share):
@@ -211,15 +212,15 @@ def share_file(drive, file_id_to_share):
     except:
         print(file_id_to_share)
     
-def get_all_files_in_folder(drive, folder_id, dict_files, recursion=True):
+def get_all_files_in_folder(drive, folder_id, dict_files, share_files, recursion=True):
     for _file in _lsf(drive, folder_id):
         if "size" in _file:
-            realver = search(r"\[v[0-9]{5,}\]", _file["name"]) #tinfoil assums v0 if missing
+            realver = search(r"\[v[0-9]{5,}\]", _file["name"]) #tinfoil assumes v0 if missing
             if realver is None:
-                dict_files.append({"id": _file["id"], "size": _file["size"], "name": "[{}].{}".format(find_title_id(_file["name"]), _file["fileExtension"]), "version": 0, "fileExtension": _file["fileExtension"], "shared": check_file_shared(drive, _file)})
+                dict_files.append({"id": _file["id"], "size": _file["size"], "name": "[{}].{}".format(find_title_id(_file["name"]), _file["fileExtension"]), "version": 0, "fileExtension": _file["fileExtension"], "shared": check_file_shared(drive, _file, share_files)})
             else:
                 realver=realver.group(0)
-                dict_files.append({"id": _file["id"], "size": _file["size"], "name": "[{}]{}.{}".format(find_title_id(_file["name"]), realver, _file["fileExtension"]), "version": int(realver[2:-1]), "fileExtension": _file["fileExtension"], "shared": check_file_shared(drive, _file)})
+                dict_files.append({"id": _file["id"], "size": _file["size"], "name": "[{}]{}.{}".format(find_title_id(_file["name"]), realver, _file["fileExtension"]), "version": int(realver[2:-1]), "fileExtension": _file["fileExtension"], "shared": check_file_shared(drive, _file, share_files)})
     if recursion:
         for _folder in _lsd(drive, folder_id):
-            get_all_files_in_folder(drive, _folder["id"], dict_files, recursion=recursion)
+            get_all_files_in_folder(drive, _folder["id"], dict_files, share_files, recursion=recursion)
