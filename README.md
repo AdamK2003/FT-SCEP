@@ -18,6 +18,7 @@ FT-SCEP uses configuration files that you generate. Here is an example one fully
   ],
   "retail_list": "https://raw.githubusercontent.com/blawar/titledb/master/retailOnly.txt",
   "titledb": "https://raw.githubusercontent.com/blawar/titledb/master/titles.US.en.json",
+  "custom_titledb": "customdb.json",
   "encryption_key": "keys/14.public.key",
   "vm_file": "do_y.cat",
   "shop_configurations": [ 
@@ -63,6 +64,10 @@ This is a list of Google Folder IDs, pointing to folders containing the games yo
 #### TitleDB and Retail List
 
 These should be URIs pointing to the source of TitleDB. Only TitleDB is required.
+
+#### Custom TitleDB
+
+Appended to TitleDB. Used for homebrew NSPs. Optional.
 
 #### Encryption Key and VM Code
 
