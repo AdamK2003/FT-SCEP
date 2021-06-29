@@ -59,6 +59,10 @@ if exists(args.cache_path):
     else:
         print("Loading TitleDB from {}.".format(args.cache_path))
         titledb = json.load(open(args.cache_path, "r"))
+        if config.get("custom_titledb"):
+            custtdb = json.load(open(config["custom_tdb"], "r"))
+            titledb.update(custtdb)
+            print("Loaded custom TitleDB")
 
 if not exists(args.cache_path):
     print("Downloading TitleDB")
@@ -68,6 +72,10 @@ if not exists(args.cache_path):
     with open(args.cache_path, "w+") as f:
         json.dump(titledb, f)
         print("Saved TitleDB to {}.".format(args.cache_path))
+    if config.get("custom_titledb"):
+        custtdb = json.load(open(config["custom_tdb"], "r"))
+        titledb.update(custtdb)
+        print("Loaded custom TitleDB")
 
 print("Starting Drive service.")
 drive = build(
