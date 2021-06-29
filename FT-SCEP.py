@@ -41,7 +41,13 @@ parse.add_argument(
     default="gdrive:",
     help="Custom domain.",
 )
-
+parse.add_argument(
+    "--share-files",
+    dest="share_files",
+    action="store_true",
+    default=False,
+    help="Enables sharing the files on gdrive.",
+)
 args = parse.parse_args()
 
 config = json.load(open(args.config, "r", encoding="utf8"))
@@ -71,7 +77,7 @@ drive = build(
 print("Getting all files. (This may take a while.)")
 all_files = []
 for i in config["mirrors"]:
-    get_all_files_in_folder(drive, i, all_files, recursion=True)
+    get_all_files_in_folder(drive, i, all_files, args.share_files, recursion=True)
 print("Matching files.")
 
 for i in all_files:
