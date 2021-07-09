@@ -35,10 +35,22 @@ parse.add_argument(
     type=str,
     help="Uploads the shops to Google Drive, creating new files, and saves the File IDs to your configuration file. Takes in an optional folder to create the files in. Defaults to root of My Drive.",
 )
-
+parse.add_argument(
+    "--domain",
+    type=str,
+    default="gdrive:",
+    help="Custom domain.",
+)
+parse.add_argument(
+    "--share-files",
+    dest="share_files",
+    action="store_true",
+    default=False,
+    help="Enables sharing the files on gdrive.",
+)
 args = parse.parse_args()
 
-config = json.load(open(args.config, "r"))
+config = json.load(open(args.config, "r", encoding="utf8"))
 
 if exists(args.cache_path):
     diff = time() - stat(args.cache_path).st_ctime
@@ -47,6 +59,10 @@ if exists(args.cache_path):
     else:
         print("Loading TitleDB from {}.".format(args.cache_path))
         titledb = json.load(open(args.cache_path, "r"))
+        if config.get("custom_titledb"):
+            custtdb = json.load(open(config["custom_titledb"], "r", encoding="utf8"))
+            titledb.update(custtdb)
+            print("Loaded custom TitleDB")
 
 if not exists(args.cache_path):
     print("Downloading TitleDB")
@@ -56,6 +72,10 @@ if not exists(args.cache_path):
     with open(args.cache_path, "w+") as f:
         json.dump(titledb, f)
         print("Saved TitleDB to {}.".format(args.cache_path))
+    if config.get("custom_titledb"):
+        custtdb = json.load(open(config["custom_titledb"], "r", encoding="utf8"))
+        titledb.update(custtdb)
+        print("Loaded custom TitleDB")
 
 print("Starting Drive service.")
 drive = build(
@@ -65,7 +85,7 @@ drive = build(
 print("Getting all files. (This may take a while.)")
 all_files = []
 for i in config["mirrors"]:
-    get_all_files_in_folder(drive, i, all_files, recursion=True)
+    get_all_files_in_folder(drive, i, all_files, args.share_files, recursion=True)
 print("Matching files.")
 
 for i in all_files:
@@ -152,13 +172,13 @@ for i in titledb:
 
 print("Generating shops.")
 
-first_base_shop = generate_shop(first_base)
-first_updates_shop = generate_shop(first_updates)
-first_dlc_shop = generate_shop(first_dlc)
-regular_base_shop = generate_shop(regular_base)
-regular_updates_shop = generate_shop(regular_updates)
-regular_dlc_shop = generate_shop(regular_dlc)
-lps_shop = generate_shop(lps)
+first_base_shop = generate_shop(first_base, args.domain)
+first_updates_shop = generate_shop(first_updates, args.domain)
+first_dlc_shop = generate_shop(first_dlc, args.domain)
+regular_base_shop = generate_shop(regular_base, args.domain)
+regular_updates_shop = generate_shop(regular_updates, args.domain)
+regular_dlc_shop = generate_shop(regular_dlc, args.domain)
+lps_shop = generate_shop(lps, args.domain)
 
 print(
     "\nTotal File Count: {}\n"
