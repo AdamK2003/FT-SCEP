@@ -89,6 +89,7 @@ for i in config["mirrors"]:
 print("Matching files.")
 
 missing_list = open('missing.txt', 'w')
+missing_entries = open('missingDB.txt', 'w')
 
 for i in all_files:
         tid = find_title_id(i["name"])
@@ -110,6 +111,7 @@ for i in all_files:
 
             titledb[tid]["mirrors"][i["fileExtension"]].append(generate_entry(i))
             print(titledb[tid])
+            missing_entries.write(titledb[tid])
 
 missing_list.close()
 
