@@ -88,6 +88,12 @@ for i in config["mirrors"]:
     get_all_files_in_folder(drive, i, all_files, args.share_files, recursion=True)
 print("Matching files.")
 
+missing_list = open('missing.txt', 'w')
+missing_list.truncate(0)
+missing_list.close()
+
+missing_list = open('missing.txt', 'a')
+
 for i in all_files:
         tid = find_title_id(i["name"])
         if tid in titledb:
@@ -101,13 +107,15 @@ for i in all_files:
 
         elif tid not in titledb:
             print("Not found in titledb: %s" % tid)
+            missing_list.write(tid + '\n')
             titledb[tid] = {'id': tid}
             titledb[tid]["mirrors"] = {}
             titledb[tid]["mirrors"][i["fileExtension"]] = []
 
             titledb[tid]["mirrors"][i["fileExtension"]].append(generate_entry(i))
             print(titledb[tid])
-            
+
+missing_list.close()
 
 # Remove entries from the database that do not have any mirrors
 for i in list(titledb.items()):
