@@ -88,11 +88,7 @@ for i in config["mirrors"]:
     get_all_files_in_folder(drive, i, all_files, args.share_files, recursion=True)
 print("Matching files.")
 
-missing_list = open('missing.txt', 'r+')
-missing_list.truncate(0)
-missing_list.close()
-
-missing_list = open('missing.txt', 'a')
+missing_list = open('missing.txt', 'w')
 
 for i in all_files:
         tid = find_title_id(i["name"])
