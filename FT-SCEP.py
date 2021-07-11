@@ -111,7 +111,7 @@ for i in all_files:
 
             titledb[tid]["mirrors"][i["fileExtension"]].append(generate_entry(i))
             print(titledb[tid])
-            missing_entries.write(titledb[tid])
+            missing_entries.write(titledb[tid] + '\n')
 
 missing_list.close()
 
