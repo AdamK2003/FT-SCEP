@@ -114,6 +114,7 @@ for i in all_files:
             missing_entries.write(titledb[tid] + '\n')
 
 missing_list.close()
+missing_entries.close()
 
 # Remove entries from the database that do not have any mirrors
 for i in list(titledb.items()):
