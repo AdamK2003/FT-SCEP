@@ -88,7 +88,7 @@ for i in config["mirrors"]:
     get_all_files_in_folder(drive, i, all_files, args.share_files, recursion=True)
 print("Matching files.")
 
-missing_list = open('missing.txt', 'w')
+missing_list = open('missingID.txt', 'w')
 missing_entries = open('missingDB.txt', 'w')
 
 for i in all_files:
