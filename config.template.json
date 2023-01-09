@@ -5,13 +5,13 @@
   "token": "gdrive.json",
   "retail_list": "https://raw.githubusercontent.com/blawar/titledb/master/retailOnly.txt",
   "titledb": "https://github.com/AdamK2003/titledb/releases/download/latest/titles.US.en.json",
-  "encryption_key": "19.public.key",
+  "encryption_key": "keys/19.public.key",
   "mirrors": ["driveIdHere"],
   "shop_configurations": [
     {
       "name": "Games",
       "includes": "0333",
-      "encryption_key": "19.public.key",
+      "encryption_key": "keys/19.public.key",
       "tinfoil_path": "shop.tfl",
       "json_path": "shop.json",
       "shop_contents": {
