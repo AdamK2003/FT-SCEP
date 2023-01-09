@@ -17,7 +17,7 @@ FT-SCEP uses configuration files that you generate. Here is an example one fully
     "1mLbgd1CoFOLDER3zd_-ZrSFFf__q13WB"
   ],
   "retail_list": "https://raw.githubusercontent.com/blawar/titledb/master/retailOnly.txt",
-  "titledb": "https://raw.githubusercontent.com/blawar/titledb/master/titles.US.en.json",
+  "titledb": "https://github.com/AdamK2003/titledb/releases/download/latest/titles.US.en.json",
   "custom_titledb": "customdb.json",
   "encryption_key": "keys/14.public.key",
   "vm_file": "do_y.cat",
