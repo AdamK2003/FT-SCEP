@@ -2,6 +2,7 @@ from googleapiclient.http import MediaIoBaseUpload
 from googleapiclient.discovery import build
 from base64 import urlsafe_b64encode
 from argparse import ArgumentParser
+import os
 from os import stat, remove
 from os.path import exists
 from hashlib import md5
@@ -16,6 +17,16 @@ parse = ArgumentParser(
     description="Generates a shop compatible with Tinfoil using a configuration file."
 )
 parse.add_argument("config", help="The config file.")
+parse.add_argument(
+    "--keys-dir",
+    type=str,
+    default=None)
+parse.add_argument(
+    "-o",
+    "--out-dir",
+    dest="out_dir",
+    type=str,
+    default=None)
 parse.add_argument(
     "--cache-path",
     type=str,
@@ -255,6 +266,8 @@ for i in range(len(config["shop_configurations"])):
         vm_file = shop_config.get("vm_file")
 
     if encryption_key:
+        if args.keys_dir:
+            encryption_key = os.path.join(args.keys_dir, encryption_key)
         shop_bytes = shop_tinfoil = encrypt(shop_bytes, encryption_key, vm_file)
 
     name = "Unnamed"
@@ -277,6 +290,9 @@ for i in range(len(config["shop_configurations"])):
             f.write(shop_json)
 
     if "tinfoil_path" in shop_config and shop_tinfoil:
+        if args.out_dir:
+            shop_config["tinfoil_path"] = os.path.join(args.out_dir, shop_config["tinfoil_path"])
+            
         print(
             "  Tinfoil:\n    Location: {}\n    MD5: {}".format(
                 shop_config["tinfoil_path"], md5(shop_tinfoil).hexdigest()
